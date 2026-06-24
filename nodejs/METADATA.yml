@@ -4,32 +4,35 @@ manifest_version: "1.0.0"
 project:
   name: "nodejs-installer"
   version: "26.3.1"
-  description: "Distribuição interna do instalador MSI do Node.js para o ecossistema WebRepo."
+  description: "Distribuição interna do instalador MSI (compactado em ZIP) do Node.js para o ecossistema WebRepo."
   author: "OpenJS Foundation"
   license: "MIT"
-  # Links voltados para o escopo do seu projeto próprio
   homepage: "https://github.com/daniellorenzo2050-png/WebRepo"
   repository: "https://github.com/daniellorenzo2050-png/WebRepo.git"
   private: false
 
-# Caminho apontando diretamente para o arquivo dentro da pasta nodejs/
+# Especificação do arquivo físico compactado no seu repositório
 binaries:
-  main: "./nodejs/node-js-26-3-1.msi"
+  main: "./nodejs/node-js-26-3-1.msi.zip"
   platform: "windows"
   architecture: "x64"
+  type: "archive" # Identifica que o arquivo precisa ser descompactado primeiro
 
-# Scripts de terminal mapeados para executar o instalador na pasta correta
+# Scripts de automação adaptados para lidar com o arquivo .zip
 scripts:
-  # Instalação padrão (com interface gráfica)
+  # Descompacta o arquivo ZIP via PowerShell (padrão no Windows)
+  unpack: "powershell -Command \"Expand-Archive -Path ./nodejs/node-js-26-3-1.msi.zip -DestinationPath ./nodejs/ -Force\""
+
+  # Instalação padrão guiada (roda após o unpack)
   install: "msiexec /i ./nodejs/node-js-26-3-1.msi"
   
-  # Instalação silenciosa em segundo plano (via terminal do WebRepo)
-  install-silent: "msiexec /i ./nodejs/node-js-26-3-1.msi /qn /norestart"
+  # Instalação silenciosa completa (descompacta e instala em segundo plano)
+  install-silent: "powershell -Command \"Expand-Archive -Path ./nodejs/node-js-26-3-1.msi.zip -DestinationPath ./nodejs/ -Force\" && msiexec /i ./nodejs/node-js-26-3-1.msi /qn /norestart"
   
   # Desinstalação silenciosa
   uninstall-silent: "msiexec /x ./nodejs/node-js-26-3-1.msi /qn /norestart"
 
-# Variáveis e binários que o sistema passa a exportar após instalado
+# Variáveis e binários que o sistema passa a exportar após a instalação completa
 exports:
   env_variables:
     - PATH: "C:\\Program Files\\nodejs\\"
