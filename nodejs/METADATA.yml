@@ -1,42 +1,13 @@
-# WebRepo Manifest Specification — Custom Package Distribution
+# WebRepo Manifest Specification — Package Deprecated
 manifest_version: "1.0.0"
 
 project:
   name: "nodejs-installer"
   version: "26.3.1"
-  description: "Distribuição interna do instalador MSI (compactado em ZIP) do Node.js para o ecossistema WebRepo."
+  description: "Este instalador foi removido do repositório local WebRepo."
   author: "OpenJS Foundation"
   license: "MIT"
   homepage: "https://github.com/daniellorenzo2050-png/WebRepo"
   repository: "https://github.com/daniellorenzo2050-png/WebRepo.git"
   private: false
-
-# Especificação do arquivo físico compactado no seu repositório
-binaries:
-  main: "./nodejs/node-js-26-3-1.msi.zip"
-  platform: "windows"
-  architecture: "x64"
-  type: "archive" # Identifica que o arquivo precisa ser descompactado primeiro
-
-# Scripts de automação adaptados para lidar com o arquivo .zip
-scripts:
-  # Descompacta o arquivo ZIP via PowerShell (padrão no Windows)
-  unpack: "powershell -Command \"Expand-Archive -Path ./nodejs/node-js-26-3-1.msi.zip -DestinationPath ./nodejs/ -Force\""
-
-  # Instalação padrão guiada (roda após o unpack)
-  install: "msiexec /i ./nodejs/node-js-26-3-1.msi"
-  
-  # Instalação silenciosa completa (descompacta e instala em segundo plano)
-  install-silent: "powershell -Command \"Expand-Archive -Path ./nodejs/node-js-26-3-1.msi.zip -DestinationPath ./nodejs/ -Force\" && msiexec /i ./nodejs/node-js-26-3-1.msi /qn /norestart"
-  
-  # Desinstalação silenciosa
-  uninstall-silent: "msiexec /x ./nodejs/node-js-26-3-1.msi /qn /norestart"
-
-# Variáveis e binários que o sistema passa a exportar após a instalação completa
-exports:
-  env_variables:
-    - PATH: "C:\\Program Files\\nodejs\\"
-  bin:
-    node: "node.exe"
-    npm: "npm.cmd"
-    npx: "npx.cmd"
+  status: "removed" # Indica que o binário não está mais disponível aqui
