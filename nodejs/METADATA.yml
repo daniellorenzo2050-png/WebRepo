@@ -1,0 +1,39 @@
+# WebRepo Manifest Specification — Custom Package Distribution
+manifest_version: "1.0.0"
+
+project:
+  name: "nodejs-installer"
+  version: "26.3.1"
+  description: "Distribuição interna do instalador MSI do Node.js para o ecossistema WebRepo."
+  author: "OpenJS Foundation"
+  license: "MIT"
+  # Links voltados para o escopo do seu projeto próprio
+  homepage: "https://github.com/daniellorenzo2050-png/WebRepo"
+  repository: "https://github.com/daniellorenzo2050-png/WebRepo.git"
+  private: false
+
+# Caminho apontando diretamente para o arquivo dentro da pasta nodejs/
+binaries:
+  main: "./nodejs/node-js-26-3-1.msi"
+  platform: "windows"
+  architecture: "x64"
+
+# Scripts de terminal mapeados para executar o instalador na pasta correta
+scripts:
+  # Instalação padrão (com interface gráfica)
+  install: "msiexec /i ./nodejs/node-js-26-3-1.msi"
+  
+  # Instalação silenciosa em segundo plano (via terminal do WebRepo)
+  install-silent: "msiexec /i ./nodejs/node-js-26-3-1.msi /qn /norestart"
+  
+  # Desinstalação silenciosa
+  uninstall-silent: "msiexec /x ./nodejs/node-js-26-3-1.msi /qn /norestart"
+
+# Variáveis e binários que o sistema passa a exportar após instalado
+exports:
+  env_variables:
+    - PATH: "C:\\Program Files\\nodejs\\"
+  bin:
+    node: "node.exe"
+    npm: "npm.cmd"
+    npx: "npx.cmd"
